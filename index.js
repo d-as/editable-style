@@ -33,9 +33,15 @@ const debounce = (callback, timeout) => {
   };
 };
 
+const isStyleElementVisible = () => {
+  const { clientWidth, clientHeight } = style;
+  return (clientWidth + clientHeight) > 0;
+};
 
-const saveLocalStyles = styles => {
-  window.localStorage.setItem(LOCAL_STORAGE_KEY, styles);
+const saveLocalStyles = (styles, force = false) => {
+  if (isStyleElementVisible() || force) {
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, styles);
+  }
 };
 
 const loadLocalStyles = () => {
@@ -67,7 +73,7 @@ const init = async () => {
           chunk.forEach(charCode => result += String.fromCharCode(charCode));
         }
 
-        saveLocalStyles(result);
+        saveLocalStyles(result, true);
       });
   }
 

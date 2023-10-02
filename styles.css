@@ -4,7 +4,7 @@ body {
 }
 
 style {
-  display: block; /* Modifying this line is dangerous */
+  display: block;
   background-color: #242424;
   color: #EEE;
   padding: 1rem;
@@ -16,4 +16,8 @@ main {
   background-color: burlywood;
   padding: 1rem;
   font-family: sans-serif;
+}
+
+* {
+  transition: all 0.5s;
 }
