@@ -5,6 +5,7 @@ const GITHUB_STYLES_URL_SUFFIX = `/editable-style/master/styles.css`;
 const GITHUB_IO_HOSTNAME_SUFFIX = 'github.io';
 
 const style = document.querySelector('style');
+const main = document.querySelector('main');
 
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
   const reader = this.getReader();
@@ -38,17 +39,36 @@ const isStyleElementVisible = () => {
   return (clientWidth + clientHeight) > 0;
 };
 
+const loadLocalStyles = () => {
+  style.innerText = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+};
+
 const saveLocalStyles = (styles, force = false) => {
   if (isStyleElementVisible() || force) {
     window.localStorage.setItem(LOCAL_STORAGE_KEY, styles);
   }
 };
 
-const loadLocalStyles = () => {
-  style.innerText = window.localStorage.getItem(LOCAL_STORAGE_KEY);
-};
+const autoSave = debounce(() => saveLocalStyles(style.innerText));
 
-style.addEventListener('input', debounce(() => saveLocalStyles(style.innerText), 500));
+style.addEventListener('input', () => {
+  autoSave();
+
+  if (!isStyleElementVisible()) {
+    const undoButton = document.createElement('button');
+    undoButton.innerText = 'Undo';
+    undoButton.style.width = '8rem';
+    undoButton.style.margin = '1rem';
+    undoButton.style.padding = '0.5rem';
+
+    undoButton.onclick = () => {
+      loadLocalStyles();
+      document.body.removeChild(undoButton);
+    };
+
+    document.body.appendChild(undoButton);
+  }
+}, 500);
 
 const getDefaultStylesURL = () => {
   const { hostname } = window.location;
