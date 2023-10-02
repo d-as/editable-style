@@ -47,7 +47,7 @@ style.addEventListener('input', debounce(() => saveLocalStyles(style.innerText),
 const getDefaultStylesURL = () => {
   const { hostname } = window.location;
 
-  if (hostname.endsWith(GITHUB_IO_HOSTNAME)) {
+  if (hostname.endsWith(GITHUB_IO_HOSTNAME_SUFFIX)) {
     const [username] = hostname.split('.');
     return `${GITHUB_STYLES_URL_PREFIX}${username}${GITHUB_STYLES_URL_SUFFIX}`;
   }
