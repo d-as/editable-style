@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  background-color: peachpuff;
+}
+
+style {
+  display: block; /* Modifying this line is dangerous */
+  background-color: #242424;
+  color: #EEE;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 12pt;
+}
+
+main {
+  background-color: burlywood;
+  padding: 1rem;
+  font-family: sans-serif;
+}
