@@ -1,4 +1,7 @@
 const LOCAL_STORAGE_KEY = 'styles';
+const LOCAL_STYLES_URL = '/styles.css';
+const GITHUB_STYLES_URL = 'https://raw.githubusercontent.com/d-as/editable-style/master/styles.css';
+
 const style = document.querySelector('style');
 
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
@@ -39,11 +42,20 @@ const loadLocalStyles = () => {
 
 style.addEventListener('input', debounce(() => saveLocalStyles(style.innerText), 500));
 
+const getDefaultStylesURL = () => {
+  const { hostname } = window.location;
+
+  if (hostname === 'github.com') {
+    return GITHUB_STYLES_URL;
+  }
+  return LOCAL_STYLES_URL;
+};
+
 const init = async () => {
   const localStyles = window.localStorage.getItem(LOCAL_STORAGE_KEY);
 
   if (!localStyles) {
-    await fetch('/styles.css')
+    await fetch(getDefaultStylesURL())
       .then(response => response.body)
       .then(async body => {
         let result = '';
