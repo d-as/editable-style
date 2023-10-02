@@ -1,7 +1,8 @@
 const LOCAL_STORAGE_KEY = 'styles';
 const LOCAL_STYLES_URL = '/styles.css';
-const GITHUB_STYLES_URL = 'https://raw.githubusercontent.com/d-as/editable-style/master/styles.css';
-const GITHUB_IO_HOSTNAME = 'd-as.github.io';
+const GITHUB_STYLES_URL_PREFIX = 'https://raw.githubusercontent.com/';
+const GITHUB_STYLES_URL_SUFFIX = `/editable-style/master/styles.css`;
+const GITHUB_IO_HOSTNAME_SUFFIX = 'github.io';
 
 const style = document.querySelector('style');
 
@@ -46,8 +47,9 @@ style.addEventListener('input', debounce(() => saveLocalStyles(style.innerText),
 const getDefaultStylesURL = () => {
   const { hostname } = window.location;
 
-  if (hostname === GITHUB_IO_HOSTNAME) {
-    return GITHUB_STYLES_URL;
+  if (hostname.endsWith(GITHUB_IO_HOSTNAME)) {
+    const [username] = hostname.split('.');
+    return `${GITHUB_STYLES_URL_PREFIX}${username}${GITHUB_STYLES_URL_SUFFIX}`;
   }
   return LOCAL_STYLES_URL;
 };
